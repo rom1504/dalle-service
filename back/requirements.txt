@@ -1,0 +1,5 @@
+Flask==1.1.2
+Flask-Cors==3.0.8
+Flask-RESTful==0.3.8
+dalle-pytorch
+tqdm
