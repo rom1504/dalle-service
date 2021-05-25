@@ -1,0 +1,97 @@
+{
+  "id": "/recocomputer/pclick-image-back",
+  "cmd": null,
+  "cpus": 2,
+  "mem": 30000,
+  "disk": 30048,
+  "networkBandwidth": 124,
+  "gpus": 0,
+  "instances": 1,
+  "constraints": [
+    [
+      "maintenance_group",
+      "MAX_PER",
+      "1"
+    ]
+  ],
+  "env": {
+    "CRITEO_APP_POOL": "default"
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 600,
+      "ignoreHttp1xx": false,
+      "intervalSeconds": 300,
+      "maxConsecutiveFailures": 3,
+      "path": "/",
+      "portIndex": 0,
+      "protocol": "HTTP",
+      "ipProtocol": "IPv4",
+      "timeoutSeconds": 300,
+      "delaySeconds": 150
+    }
+  ],
+  "labels": {
+    "INIT_KERBEROS": "renew",
+    "OWNERS": "r.beaumont,m.vinyes",
+	"MESOS_TERM_DEBUG_GRANTED_TO": "r.beaumont,m.vinyes",
+    "vip.name": "pclick-image-back"
+  },
+  "portDefinitions": [
+    {
+      "port": 10394,
+      "labels": {
+        "vip.enabled": "true",
+        "vip.l7_http_redirect_to_https": "false",
+        "vip.name": "pclick-image-back",
+        "ctags": "http",
+        "vip.visibility": "private",
+        "vip.layer": "l7"
+      },
+      "protocol": "tcp"
+    }
+  ],
+  "fetch": [
+    {
+      "uri": "http://nexus.query.consul/service/local/repo_groups/criteo/content/com/criteo/tarballs/hadoop/2.6.0-cdh5.11.0-criteo-20190319140240/hadoop-2.6.0-cdh5.11.0-criteo-20190319140240.tar.gz",
+      "extract": false,
+      "executable": false,
+      "cache": false
+    },
+	{
+	  "uri": "https://gitlab.criteois.com/m.vinyes/product-search/-/archive/0.0.12/product-search-0.0.12.tar.gz",
+      "extract": true,
+      "executable": false,
+      "cache": false
+	},
+    {
+      "uri": "http://nexus.query.consul/service/local/artifact/maven/content?r=criteo&g=com.criteo.tarballs&a=clusters-configuration-hadoop&v=LATEST&e=tar.gz#/hadoop-config.tar.gz",
+      "extract": false,
+      "executable": false,
+      "cache": false
+    },
+    {
+      "uri": "http://nexus.query.consul/service/local/artifact/maven/content?r=criteo&g=com.criteo.tarballs&a=clusters-configuration-analytics&v=LATEST&e=tar.gz#/analytics-config.tar.gz",
+      "extract": false,
+      "executable": false,
+      "cache": false
+    },
+    {
+      "uri": "http://nexus.query.consul/service/local/repo_groups/criteo/content/com/criteo/java/garmadon-agent/1.4.0-criteo-20200513122409/garmadon-agent-1.4.0-criteo-20200513122409.jar",
+      "extract": false,
+      "executable": false,
+      "cache": false,
+      "destPath": "garmadon-agent.jar"
+    }
+  ],
+  "user": "recocomputer",
+  "args": [
+    "/bin/bash",
+    "wrapme.sh",
+    "-p",
+    "-r",
+    "-c",
+    "mkdir hadoop && tar -xzf hadoop-2.6.0-cdh5.11.0-criteo-20190319140240.tar.gz -C hadoop --strip-components 1 && mkdir hadoop-clusters-conf && tar -xzf hadoop-config.tar.gz -C hadoop-clusters-conf --strip-components 1 && mkdir analytics-clusters-conf && tar -xzf analytics-config.tar.gz -C analytics-clusters-conf --strip-components 1 && export HIVE_CONF_DIR=\"$MESOS_SANDBOX/analytics-config/hive\" && export SQOOP_CONF_DIR=\"$MESOS_SANDBOX/analytics-config/sqoop\" && export _JAVA_OPTIONS=\"${_JAVA_OPTIONS:-} -javaagent:${MESOS_SANDBOX}/garmadon-agent.jar=com.criteo.hadoop.garmadon.agent.modules.StandaloneModule -Dgarmadon.discovery=consul -Dgarmadon.consul.service=lakeprobes-garmadon-forwarder\" && export JAVA_HOME=\"$(dirname $(dirname $(readlink -f $(which java))))\" && export HADOOP_HOME=\"$MESOS_SANDBOX/hadoop\" && export HADOOP_CONF_DIR_BASE=\"$MESOS_SANDBOX/hadoop-config\" && export HADOOP_CONF_DIR=\"$HADOOP_CONF_DIR_BASE/hadoop\" && export HADOOP_CLASSPATH=\"$HADOOP_HOME/share/hadoop/hdfs/lib/*:$HADOOP_HOME/share/hadoop/common/lib/*:$HADOOP_HOME/share/hadoop/yarn/lib/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*:$HADOOP_HOME/share/hadoop/tools/lib/*\" && export LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH:-}:$JAVA_HOME/jre/lib/amd64/server:$HADOOP_HOME/lib/native\" && export ANALYTICS_CONF_DIR=\"$MESOS_SANDBOX/analytics-config\" && export HADOOP_MAPRED_HOME=\"$HADOOP_HOME\" && export HADOOP_ENV=\"preprod_pa4\" && export PATH=\"$PATH:$HADOOP_HOME/bin\" && export HADOOP_OPTS=\"-XX:+DisplayVMOutputToStderr\" && export YARN_CLIENT_OPTS=\"-XX:+DisplayVMOutputToStderr\" && mkdir \"$HADOOP_CONF_DIR_BASE\" && mkdir -p \"$ANALYTICS_CONF_DIR\" && cp -r $MESOS_SANDBOX/hadoop-clusters-conf/preprod-pa4/* \"$HADOOP_CONF_DIR_BASE\" && cp -r $MESOS_SANDBOX/analytics-clusters-conf/preprod-pa4/* \"$ANALYTICS_CONF_DIR\" && sed -i \"s/^.*io\\.compression\\.codecs.*$/io.compression.codecs=org.apache.hadoop.io.compress.GzipCodec, org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.BZip2Codec,org.apache.hadoop.io.compress.SnappyCodec/g\" \"$HADOOP_CONF_DIR/core-site.xml\" && hdfs dfs -copyToLocal viewfs://preprod-pa4/user/deepr/dev/r.beaumont/bert_emb_big_np/inversed.npy . && hdfs dfs -copyToLocal viewfs://preprod-pa4/user/deepr/dev/r.beaumont/bert_emb_big_np/full_index_ip.index full_index.index && hdfs dfs -copyToLocal viewfs://preprod-pa4/user/r.beaumont/bert_knn.pex . && python3 bert_knn.pex product-search-0.0.12/bert_search/bert_knn.py $PORT0"
+  ],
+  "maxLaunchDelaySeconds": 300
+}
