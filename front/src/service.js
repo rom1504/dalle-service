@@ -9,6 +9,9 @@ export default class Service {
 
   async getDalleList () {
     const result = JsonBigint.parse(await (await fetch(this.backend + `/dalle-list`, {
+    headers: {
+        'Bypass-Tunnel-Reminder': "go"
+      }
     })).text())
 
     return result
@@ -18,6 +21,9 @@ export default class Service {
     console.log('calling', text, numImages)
     const result = JsonBigint.parse(await (await fetch(this.backend + `/dalle`, {
       method: 'POST',
+      headers: {
+        'Bypass-Tunnel-Reminder': "go"
+      },
       body:JSON.stringify({
         text,
         'num_images': numImages,
