@@ -103,13 +103,17 @@ class DalleService extends LitElement {
     }
     #products {
       margin-top:50px;
-      width:80%;
+      width:87%;
       float:right;
     }
     #filter {
       margin-top:50px;
-      width:19%;
+      width:13%;
       float:left;
+    }
+    #searchLine {
+        
+      margin-left:13%;
     }
 
     `
