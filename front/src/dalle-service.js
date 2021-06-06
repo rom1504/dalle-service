@@ -5,9 +5,26 @@ import Service from './service'
 class DalleService extends LitElement {
   constructor () {
     super()
-    this.backendHost = '' // put something here
+    const urlParams = new URLSearchParams(window.location.search)
+    const back = urlParams.get('back')
+    const model = urlParams.get('model')
+    const query = urlParams.get('query')
+    if (model != null) {
+        this.currentModel = model
+    } else {
+        this.currentModel = ''
+    }
+    if (back != null) {
+        this.backendHost = back
+    } else {
+        this.backendHost = '' // put something here
+    }
+    if (query != null) {
+        this.text = query
+    } else {
+        this.text = "pink shoes"
+    }
     this.service = new Service(this.backendHost)
-    this.text = "pink shoes"
     this.numImages = 4
     this.models = []
     this.imagesDalle = []
@@ -15,10 +32,12 @@ class DalleService extends LitElement {
     this.initModels()
   }
 
-  initModels () {
+  initModels (forceChange) {
     this.service.getDalleList().then(l => {
       this.models = l
-      this.currentModel = this.models[0]
+      if (forceChange || this.currentModel === '') {
+        this.currentModel = this.models[0]
+      }
     })
   }
 
@@ -43,7 +62,7 @@ class DalleService extends LitElement {
   updated (_changedProperties) {
       if (_changedProperties.has('backendHost')) {
         this.service.backend = this.backendHost
-        this.initModels()
+        this.initModels(true)
       }
   }
 
