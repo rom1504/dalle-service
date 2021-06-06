@@ -7,13 +7,13 @@ class DalleService extends LitElement {
     super()
     this.backendHost = 'http://mozart-rbeaumont-default-gpu.service.am6.consul.prod.crto.in:1234'
     this.service = new Service(this.backendHost)
-    this.text = "The Heather dress from Diane von Furstenberg has a certain charm that aligns perfectly with the brand's feminine aesthetic. Comfortable in crisp stretch cotton-poplin, the midi-length style comes in pink with a yellow palm tree print covering the loose-fit silhouette. As intended by the creator of the iconic wrap dress, this design can be dressed up or down with ease for any event.    "
+    this.text = "pink shoes"
     this.numImages = 4
     this.imagesDalle = []
     this.loading = false
     this.service.getDalleList().then(l => {
       this.models = l
-      this.currentModel = this.models[0]
+      this.currentModel = this.models[3]
     })
   }
 
@@ -21,6 +21,7 @@ class DalleService extends LitElement {
     return {
       imagesDalle: { type: Array },
       loading: { type: Boolean },
+      loadingSeconds: { type: Number },
       text: { type: String },
       numImages: { type: Number },
       models: { type: Array },
@@ -35,10 +36,13 @@ class DalleService extends LitElement {
 
   async generate () {
     this.loading = true
+    this.loadingSeconds = 10
+    const i = setInterval(() => this.loadingSeconds-=1, 1000)
     const results = await this.service.callDalleService(this.text, this.numImages, this.currentModel)
     console.log(results)
     this.imagesDalle = results
     this.loading = false
+    clearInterval(i)
   }
 
   renderImage (image) {
@@ -123,7 +127,7 @@ class DalleService extends LitElement {
     </div>
 
     <div id="products">
-    ${this.loading ? 'loading, please wait a few seconds...' : ''}
+    ${this.loading ? `loading, please wait ${this.loadingSeconds} seconds...` : ''}
     ${this.imagesDalle.map (image => this.renderImage(image))}
     </div>
     </div>
