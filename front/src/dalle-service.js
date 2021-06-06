@@ -74,11 +74,6 @@ class DalleService extends LitElement {
     #searchBar:hover, #searchBar:focus {
       box-shadow: 0px 0px 7px  #ccc;
     }
-    #logoFull {
-      width: 8%;
-      margin-right:3%;
-      vertical-align:middle;
-    }
     #all {
       margin-left:2%;
       margin-right:2%;
@@ -111,12 +106,12 @@ class DalleService extends LitElement {
     return html`
     <div id="all">
     <div id="searchLine">
-    <img src="assets/logo_full.png" id="logoFull" />
       <span id="inputSearchBar">
         <input id="searchBar" type="text" value=${this.text} @input=${e => {this.text = e.target.value}}/>
         <img src="assets/search.png" id="textSearch" @click=${e => { this.generate() }} />
         <select @input=${e => {this.currentModel = e.target.value}}>
         ${this.models.map(model => html`<option value=${model} ?selected=${model === this.currentModel}>${model}</option>`)}</select>
+        Backend url: <input type="text" value=${this.backendHost} @input=${e => {this.backendHost = e.target.value}}/>
       </span>
      
     </div>
