@@ -5,7 +5,7 @@ import Service from './service'
 class DalleService extends LitElement {
   constructor () {
     super()
-    this.backendHost = 'http://mozart-rbeaumont-default-gpu.service.am6.consul.prod.crto.in:1234'
+    this.backendHost = '' // put something here
     this.service = new Service(this.backendHost)
     this.text = "pink shoes"
     this.numImages = 4
@@ -13,7 +13,7 @@ class DalleService extends LitElement {
     this.loading = false
     this.service.getDalleList().then(l => {
       this.models = l
-      this.currentModel = this.models[3]
+      this.currentModel = this.models[0]
     })
   }
 
@@ -108,8 +108,6 @@ class DalleService extends LitElement {
   }
 
   render () {
-    //      <input type="text" value=${this.numImages} @change=${e => {this.numImages = parseInt(e.target.value)}}/>
-    //     <button type="button" @click=${() => this.generate()}>Generate</button> <br />
     return html`
     <div id="all">
     <div id="searchLine">
@@ -123,7 +121,7 @@ class DalleService extends LitElement {
      
     </div>
     <div id="filter">
-      Product Gen ! <br />
+      Dalle Text to Image ! <br />
     </div>
 
     <div id="products">
