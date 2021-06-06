@@ -1,3 +1,11 @@
-#pclick_image
+## Dalle flask service
 
-pex -r requirements.txt -o pclick_image.pex
+### Installation
+
+`pip install -r requirements.txt`
+
+## Usage
+
+change model_paths.json with your dalle checkpoints
+
+`python3 dalle_service.py 1234`
