@@ -36,12 +36,7 @@ from io import BytesIO
 def exists(val):
     return val is not None
 
-models = {
-    "mytheresa": "deepspeed_batch8_num4.pt",
-    "amazon": "amazon_8machine_nozero_good_continue_last.pt",
-    "jtv": "jtv_dalle.pt.pt",
-    "kaggle": "kaggle_2_machine_continue4.pt"
-}
+models = json.load(open("model_paths.json"))
 
 
 vae = VQGanVAE1024()
