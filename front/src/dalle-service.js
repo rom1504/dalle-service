@@ -10,13 +10,21 @@ class DalleService extends LitElement {
     this.text = "The Heather dress from Diane von Furstenberg has a certain charm that aligns perfectly with the brand's feminine aesthetic. Comfortable in crisp stretch cotton-poplin, the midi-length style comes in pink with a yellow palm tree print covering the loose-fit silhouette. As intended by the creator of the iconic wrap dress, this design can be dressed up or down with ease for any event.    "
     this.numImages = 4
     this.imagesDalle = []
+    this.loading = false
+    this.service.getDalleList().then(l => {
+      this.models = l
+      this.currentModel = this.models[0]
+    })
   }
 
   static get properties () {
     return {
       imagesDalle: { type: Array },
+      loading: { type: Boolean },
       text: { type: String },
-      numImages: { type: Number }
+      numImages: { type: Number },
+      models: { type: Array },
+      currentModel: { type: String }
     }
   }
 
@@ -26,9 +34,11 @@ class DalleService extends LitElement {
   }
 
   async generate () {
-    const results = await this.service.callDalleService(this.text, this.numImages)
+    this.loading = true
+    const results = await this.service.callDalleService(this.text, this.numImages, this.currentModel)
     console.log(results)
     this.imagesDalle = results
+    this.loading = false
   }
 
   renderImage (image) {
@@ -103,16 +113,17 @@ class DalleService extends LitElement {
       <span id="inputSearchBar">
         <input id="searchBar" type="text" value=${this.text} @input=${e => {this.text = e.target.value}}/>
         <img src="assets/search.png" id="textSearch" @click=${e => { this.generate() }} />
+        <select @input=${e => {this.currentModel = e.target.value}}>
+        ${this.models.map(model => html`<option value=${model} ?selected=${model === this.currentModel}>${model}</option>`)}</select>
       </span>
      
     </div>
     <div id="filter">
       Product Gen ! <br />
-      Take some prompt examples from <a href="https://www.mytheresa.com/en-gb/clothing/dresses.html">My theresa</a> website.<br />
-      The default prompt comes from <a href="https://www.mytheresa.com/en-gb/diane-von-furstenberg-heather-printed-stretch-cotton-midi-dress-1850994.html?catref=category">this product</a>
     </div>
 
     <div id="products">
+    ${this.loading ? 'loading, please wait a few seconds...' : ''}
     ${this.imagesDalle.map (image => this.renderImage(image))}
     </div>
     </div>

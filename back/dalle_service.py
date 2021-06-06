@@ -30,27 +30,36 @@ from io import BytesIO
 
 # helper fns
 
-def exists(val):
-    return val is not None
-
 
 # load DALL-E
 
-dalle_path = Path("dalle_32.pt")
+def exists(val):
+    return val is not None
 
-assert dalle_path.exists(), 'trained DALL-E must exist'
+models = {
+    "mytheresa": "deepspeed_batch8_num4.pt",
+    "amazon": "amazon_8machine_nozero_good_continue_last.pt",
+    "jtv": "jtv_dalle.pt.pt",
+    "kaggle": "kaggle_2_machine_continue4.pt"
+}
 
-load_obj = torch.load(str(dalle_path))
-dalle_params, vae_params, weights = load_obj.pop('hparams'), load_obj.pop('vae_params'), load_obj.pop('weights')
-
-dalle_params.pop('vae', None) # cleanup later
 
 vae = VQGanVAE1024()
 
+dalles = {}
 
-dalle = DALLE(vae = vae, **dalle_params).cuda()
+for name, model_path in models.items():
+    assert Path(model_path).exists(), 'trained DALL-E '+model_path+' must exist'
+    load_obj = torch.load(model_path)
+    dalle_params, _, weights = load_obj.pop('hparams'), load_obj.pop('vae_params'), load_obj.pop('weights')
+    dalle_params.pop('vae', None) # cleanup later
+    
+    dalle = DALLE(vae = vae, **dalle_params).cuda()
+    
+    dalle.load_state_dict(weights)
+    dalles[name] = dalle
 
-dalle.load_state_dict(weights)
+
 
 batch_size = 4
 
@@ -62,11 +71,17 @@ image_size = vae.image_size
 
 
 
+class DalleList(Resource):
+    def get(self):
+        return list(dalles.keys())
+
 class DalleService(Resource):
     def post(self):
         json_data = request.get_json(force=True)
         text_input = json_data["text"]
         num_images = json_data["num_images"]
+        dalle_name = json_data["dalle_name"] if "dalle_name" in json_data else "mytheresa"
+        dalle = dalles[dalle_name]
 
         text = tokenizer.tokenize([text_input], dalle.text_seq_len).cuda()
 
@@ -112,6 +127,7 @@ class Health(Resource):
 
 app = Flask(__name__)
 api = Api(app)
+api.add_resource(DalleList, '/dalle-list')
 api.add_resource(DalleService, '/dalle')
 api.add_resource(Health, '/')
 
