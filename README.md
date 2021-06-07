@@ -12,6 +12,8 @@ First follow [back](back) (you may choose to use https://ngrok.com/ to expose yo
 
 Then put your backend url in https://rom1504.github.io/dalle-service/
 
+You can share an url such as https://rom1504.github.io/dalle-service?back=https://yourbackend.com
+
 
 ## End to end documentation
 
