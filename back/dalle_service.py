@@ -75,7 +75,7 @@ class DalleService(Resource):
         json_data = request.get_json(force=True)
         text_input = json_data["text"]
         num_images = json_data["num_images"]
-        dalle_name = json_data["dalle_name"] if "dalle_name" in json_data else "mytheresa"
+        dalle_name = json_data["dalle_name"]
         dalle = dalles[dalle_name]
 
         text = tokenizer.tokenize([text_input], dalle.text_seq_len).cuda()
