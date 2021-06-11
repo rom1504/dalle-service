@@ -24,6 +24,6 @@ If you want to run everything yourself, you can go to [back](back) then to [fron
 
 ## What Dalle models can I use ?
 
-You can either train your model yourself with [DALL-E models](https://github.com/lucidrains/DALLE-pytorch)
+You can either train your model yourself with [DALL-E](https://github.com/lucidrains/DALLE-pytorch)
 
 Or use a pretrained one from https://github.com/robvanvolt/DALLE-models/tree/main/models/taming_transformer 
