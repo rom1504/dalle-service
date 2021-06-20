@@ -39,7 +39,7 @@ def exists(val):
 models = json.load(open("model_paths.json"))
 
 
-vae = VQGanVAE()
+vae = VQGanVAE(None, None)
 
 dalles = {}
 
