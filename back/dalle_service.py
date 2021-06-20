@@ -22,7 +22,7 @@ from torchvision.utils import make_grid, save_image
 
 # dalle related classes and utils
 
-from dalle_pytorch import DiscreteVAE, OpenAIDiscreteVAE, VQGanVAE1024, DALLE
+from dalle_pytorch import DiscreteVAE, OpenAIDiscreteVAE, VQGanVAE, DALLE
 from dalle_pytorch.tokenizer import tokenizer, HugTokenizer, YttmTokenizer, ChineseTokenizer
 
 import base64
@@ -39,7 +39,7 @@ def exists(val):
 models = json.load(open("model_paths.json"))
 
 
-vae = VQGanVAE1024()
+vae = VQGanVAE()
 
 dalles = {}
 
