@@ -8,4 +8,4 @@
 
 change model_paths.json with your dalle checkpoints
 
-`python3 dalle_service.py 1234`
+`python3 app.py 1234`

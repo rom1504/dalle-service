@@ -6,7 +6,7 @@ class DalleService extends LitElement {
   constructor () {
     super()
     const urlParams = new URLSearchParams(window.location.search)
-    const back = urlParams.get('back')
+    const dalle_server = urlParams.get('dalle_server')
     const model = urlParams.get('model')
     const query = urlParams.get('query')
     if (model != null) {
@@ -14,8 +14,8 @@ class DalleService extends LitElement {
     } else {
         this.currentModel = ''
     }
-    if (back != null) {
-        this.backendHost = back
+    if (dalle_server != null) {
+        this.backendHost = dalle_server
     } else {
         this.backendHost = '' // put something here
     }
