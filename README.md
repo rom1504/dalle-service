@@ -1,29 +1,32 @@
-# Dalle-service
+<p align="center">
+  <img width="60px" src="https://user-images.githubusercontent.com/6180201/124396344-45c64d00-dd09-11eb-9a51-b6ffb5d61b3c.png" alt="giant microphone"/><br/>
+  <h2 align="center">DALL-E Playground</h2>
+</p>
 
-This is a simple front + back making it easy to use [DALL-E models](https://github.com/lucidrains/DALLE-pytorch)
+A playground for DALL-E enthusiats to tinker with the [open-source version of DALL-E](https://github.com/lucidrains/DALLE-pytorch).
 
-![image](https://user-images.githubusercontent.com/2346494/120942358-affaca80-c728-11eb-93c0-084e1c27435d.png)
+REPLACE ME WITH VIDEO ![image](https://user-images.githubusercontent.com/2346494/120942358-affaca80-c728-11eb-93c0-084e1c27435d.png)
 
-## Running the back on google colab
+## Fast usage
 
-If you want to run the backend on google colab, you can run [this notebook](https://colab.research.google.com/github/rom1504/dalle-service/blob/master/dalle_back.ipynb)
+You can tinker with the DALL-E playground using a pre-hosted frontend. Follow these steps:
+1. Run the DALL-E image generating web server using Google Colab and [this notebook](https://colab.research.google.com/github/rom1504/dalle-service/blob/master/dalle_back.ipynb)
+2. Copy the URL from the last executed cell. Look for the line with "_your url is: https://XXXX.loca.lt_".
+3. Replace the `dalle_server` query param with the hostname from the step #2 `https://rom1504.github.io/dalle-service?dalle_server=[YOUR_LOCA_HOSTNAME]` and browse to this url.
 
-You can then use the gh pages front with an url such as https://rom1504.github.io/dalle-service?back=https://XXXX.loca.lt
+## Local development
 
-## Running the back myself
+Follow these steps in case you'd like to clone and run the DALL-E playground locally:
+1. Clone or fork this repository
+2. Create a virtual environment `cd dalle_server && python3 -m venv ENV_NAME`
+3. Install requirements `pip install -r requirements.txt`
+4. Make sure you have pytorch and its dependies installed _[Installation guide](https://pytorch.org/get-started/locally/)_
+5. Download desired models [here](https://github.com/robvanvolt/DALLE-models/tree/main/models/taming_transformer) and put them in the dalle_server directory. Update the `pretrained_models` json file accordingly so it will serve the newly-added models to your web app.
+6. Run web server `python app.py`
+7. In a different terminal, install frontend's modules `cd front && npm install` and run it `npm start`
+8. Copy backend's url from step 6 and paste it in the backend's url input within the web app
 
-First follow [back](back) (you may choose to use https://ngrok.com/ to expose your locally running backend)
-
-Then put your backend url in https://rom1504.github.io/dalle-service/
-
-You can share an url such as https://rom1504.github.io/dalle-service?back=https://yourbackend.com
-
-## Runnning the back and the front
-
-If you want to run everything yourself, you can go to [back](back) then to [front](front)
 
 ## What Dalle models can I use ?
 
-You can either train your model yourself with [DALL-E](https://github.com/lucidrains/DALLE-pytorch)
-
-Or use a pretrained one from https://github.com/robvanvolt/DALLE-models/tree/main/models/taming_transformer 
+You can either train your model yourself with [DALL-E](https://github.com/lucidrains/DALLE-pytorch) or use a pretrained one from https://github.com/robvanvolt/DALLE-models/tree/main/models/taming_transformer 
