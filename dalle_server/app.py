@@ -52,7 +52,7 @@ class ImageGenerationService(Resource):
         json_data = request.get_json(force=True)
         text_prompt = json_data["text"]
         num_images = json_data["num_images"]
-        model_name = json_data["dalle_name"]
+        model_name = json_data["model_name"]
         model = dalle_loaded_models[model_name]
 
         text = tokenizer.tokenize([text_prompt], model.text_seq_len).cuda()
@@ -94,7 +94,7 @@ class Health(Resource):
 
 app = Flask(__name__)
 api = Api(app)
-api.add_resource(AvailableModels, '/dalle-list')
+api.add_resource(AvailableModels, '/available-models')
 api.add_resource(ImageGenerationService, '/dalle')
 api.add_resource(Health, '/')
 
