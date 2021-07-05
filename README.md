@@ -5,7 +5,7 @@
 
 A playground for DALL-E enthusiats to tinker with the [open-source version of DALL-E](https://github.com/lucidrains/DALLE-pytorch).
 
-REPLACE ME WITH VIDEO ![image](https://user-images.githubusercontent.com/2346494/120942358-affaca80-c728-11eb-93c0-084e1c27435d.png)
+https://user-images.githubusercontent.com/6180201/124460076-30940180-dd8f-11eb-9bac-10144b17840b.mp4
 
 ## Fast usage
 
