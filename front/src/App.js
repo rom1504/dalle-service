@@ -99,11 +99,11 @@ const App = ({classes}) => {
 
             <Grid item>
               <AvailableModelsInput models={models} selectedModel={selectedModel} onModelSelected={onModelSelected}
-                                    disabled={!isBackendUrlValid}/>
+                                    disabled={!isBackendUrlValid || isFetchingModelsList}/>
             </Grid>
 
             <Grid item>
-              <TextPromptInput enterPressedCallback={enterPressedCallback} disabled={isFetchingImgs || !isBackendUrlValid}/>
+              <TextPromptInput enterPressedCallback={enterPressedCallback} disabled={isFetchingImgs || !isBackendUrlValid || isFetchingModelsList}/>
             </Grid>
           </Grid>
         </Grid>
