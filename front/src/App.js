@@ -8,7 +8,7 @@ import {PulseLoader} from "react-spinners";
 
 import "./App.css";
 import AvailableModelsInput from "./AvailableModelsInput";
-import {isValidURL} from "./utils";
+import BackendUrlInput from "./BackendUrlInput";
 
 const useStyles = () => ({
   root: {
@@ -19,16 +19,10 @@ const useStyles = () => ({
     alignItems: 'center',
     textAlign: 'center',
   },
-  inputBackend: {
-    minWidth: '220px',
-  },
-  inputModel: {
-    minWidth: '100px',
-  },
   title: {
     marginBottom: '30px',
   },
-  subtitle:{
+  subtitle: {
     marginBottom: '60px',
   },
   gallery: {
@@ -44,23 +38,21 @@ const App = ({classes}) => {
   const [selectedModel, setSelectedModel] = useState('');
   const [isFetchingImgs, setIsFetchingImgs] = useState(false);
   const [generatedImages, setGeneratedImages] = useState([]);
-  const [isBackendUrlValid, setIsBackendUrlValid] = useState(false);
   const maxImagesPerQuery = 5;
 
+  const isBackendUrlValid = backendUrl !== ''
+
   useEffect(() => {
-    if (isBackendUrlValid) {
-      getAvailableModels(backendUrl).then((modelsList) => {
+      if (isBackendUrlValid) {
+        getAvailableModels(backendUrl).then((modelsList) => {
           setModels(modelsList)
           if (modelsList.length > 0) {
             setSelectedModel(modelsList[0])
           }
-        }
-      )
-    } else {
-      setModels([])
-      setSelectedModel('')
+        })
+      }
     }
-  }, [isBackendUrlValid]);
+    , [backendUrl]);
 
 
   function onModelSelected(event) {
@@ -76,13 +68,6 @@ const App = ({classes}) => {
     })
   }
 
-  function checkIfBackendUrlValid() {
-    if (isValidURL(backendUrl)) {
-      setIsBackendUrlValid(true)
-    } else {
-      setIsBackendUrlValid(false)
-    }
-  }
 
   return (
     <div className={classes.root}>
@@ -102,11 +87,10 @@ const App = ({classes}) => {
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item>
-              <TextField className={classes.inputBackend} id="standard-basic" label="Backend URL" value={backendUrl}
-                         onBlur={() => checkIfBackendUrlValid()}
-                         onChange={(event) => {
-                           setBackendUrl(event.target.value)
-                         }}/>
+              <BackendUrlInput setBackendValidUrl={setBackendUrl} setBackendInvalidUrl={() => {
+                setModels([])
+                setSelectedModel('')
+              }}/>
             </Grid>
 
             <Grid item>
