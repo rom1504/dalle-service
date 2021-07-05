@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import withStyles from "@material-ui/core/styles/withStyles";
-import {Grid, TextField, Typography} from "@material-ui/core";
+import {Grid, Typography} from "@material-ui/core";
 import {callDalleService, getAvailableModels} from "./backend_api";
 import GeneratedImageList from "./GeneratedImageList";
 import TextPromptInput from "./TextPromptInput";
@@ -20,10 +20,10 @@ const useStyles = () => ({
     textAlign: 'center',
   },
   title: {
-    marginBottom: '30px',
+    marginBottom: '20px',
   },
   subtitle: {
-    marginBottom: '60px',
+    marginBottom: '30px',
   },
   gallery: {
     marginTop: '30px',
@@ -37,6 +37,7 @@ const App = ({classes}) => {
   const [models, setModels] = useState([]);
   const [selectedModel, setSelectedModel] = useState('');
   const [isFetchingImgs, setIsFetchingImgs] = useState(false);
+  const [isFetchingModelsList, setIsFetchingModelsList] = useState(false);
   const [generatedImages, setGeneratedImages] = useState([]);
   const maxImagesPerQuery = 5;
 
@@ -44,11 +45,13 @@ const App = ({classes}) => {
 
   useEffect(() => {
       if (isBackendUrlValid) {
+        setIsFetchingModelsList(true)
         getAvailableModels(backendUrl).then((modelsList) => {
           setModels(modelsList)
           if (modelsList.length > 0) {
             setSelectedModel(modelsList[0])
           }
+          setIsFetchingModelsList(false)
         })
       }
     }
@@ -87,10 +90,11 @@ const App = ({classes}) => {
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item>
-              <BackendUrlInput setBackendValidUrl={setBackendUrl} setBackendInvalidUrl={() => {
-                setModels([])
-                setSelectedModel('')
-              }}/>
+              <BackendUrlInput setBackendValidUrl={setBackendUrl} isLoadingModels={isFetchingModelsList}
+                               setBackendInvalidUrl={() => {
+                                 setModels([])
+                                 setSelectedModel('')
+                               }}/>
             </Grid>
 
             <Grid item>
