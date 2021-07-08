@@ -8,6 +8,9 @@ const useStyles = () => ({
   inputBackend: {
     minWidth: '220px',
   },
+  loadingSpinner: {
+    paddingTop: '20px !important',
+  }
 })
 
 const BackendUrlInput = ({classes, setBackendValidUrl, setBackendInvalidUrl, isLoadingModels}) => {
@@ -29,7 +32,7 @@ const BackendUrlInput = ({classes, setBackendValidUrl, setBackendInvalidUrl, isL
         <TextField className={classes.inputBackend} id="standard-basic" label="Backend URL" value={backendUrl}
                    onChange={onChange}/>
       </Grid>
-      <Grid item>
+      <Grid item className={classes.loadingSpinner}>
         <PulseLoader sizeUnit={"px"} size={5} color="purple" loading={isLoadingModels}/>
       </Grid>
     </Grid>

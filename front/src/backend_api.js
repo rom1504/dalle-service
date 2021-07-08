@@ -4,7 +4,8 @@ export async function callDalleService(backendUrl, text, numImages, dalleName) {
   return JsonBigint.parse(await (await fetch(backendUrl + `/dalle`, {
     method: 'POST',
     headers: {
-      'Bypass-Tunnel-Reminder': "go"
+      'Bypass-Tunnel-Reminder': "go",
+       'mode': 'no-cors'
     },
     body: JSON.stringify({
       text,

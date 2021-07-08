@@ -5,10 +5,10 @@ const ImageObject = ({imgData, alt}) => <img src={`data:image/png;base64,${imgDa
 
 const GeneratedImageList = ({generatedImages}) => {
   return (
-    <Grid container spacing={2}>
-      {generatedImages.map((generatedImg, index) => {
+    <Grid container justify="center" alignItems="center" spacing={3}>
+      {generatedImages2.map((generatedImg, index) => {
         return (
-          <Grid item id={index} xs={3}>
+          <Grid item id={index}>
             <ImageObject imgData={generatedImg} alt={index}/>
           </Grid>
         )

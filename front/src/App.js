@@ -28,6 +28,7 @@ const useStyles = () => ({
   gallery: {
     marginTop: '30px',
     padding: '10px',
+    maxWidth: '60%',
   },
 });
 
@@ -63,7 +64,7 @@ const App = ({classes}) => {
   }
 
   function enterPressedCallback(promptText) {
-    console.log('API call to DALL-E web service with the following prompt', promptText);
+    console.log('API call to DALL-E web service with the following prompt [' + promptText + ']');
     setIsFetchingImgs(true)
     callDalleService(backendUrl, promptText, maxImagesPerQuery, selectedModel).then((generatedImgs) => {
       setGeneratedImages(generatedImgs)
@@ -108,12 +109,10 @@ const App = ({classes}) => {
           </Grid>
         </Grid>
 
-        <Grid item xs={12}>
-          <div className={classes.gallery}>
-            {!isFetchingImgs && <GeneratedImageList generatedImages={generatedImages}/>}
-            {isFetchingImgs && <PulseLoader sizeUnit={"px"} size={20} color="purple" loading={isFetchingImgs}/>}
-          </div>
-        </Grid>
+      </Grid>
+      <Grid container justify="center" alignItems="center" className={classes.gallery}>
+        {!isFetchingImgs && <GeneratedImageList generatedImages={generatedImages}/>}
+        {isFetchingImgs && <PulseLoader sizeUnit={"px"} size={20} color="purple" loading={isFetchingImgs}/>}
       </Grid>
     </div>
   )
