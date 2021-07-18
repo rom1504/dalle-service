@@ -6,7 +6,7 @@ const ImageObject = ({imgData, alt}) => <img src={`data:image/png;base64,${imgDa
 const GeneratedImageList = ({generatedImages}) => {
   return (
     <Grid container justify="center" alignItems="center" spacing={3}>
-      {generatedImages2.map((generatedImg, index) => {
+      {generatedImages.map((generatedImg, index) => {
         return (
           <Grid item id={index}>
             <ImageObject imgData={generatedImg} alt={index}/>

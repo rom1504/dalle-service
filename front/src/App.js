@@ -54,6 +54,8 @@ const App = ({classes}) => {
             setSelectedModel(modelsList[0])
           }
           setIsFetchingModelsList(false)
+        }).catch((error)=>{
+          setIsFetchingModelsList(false)
         })
       }
     }

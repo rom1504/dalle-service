@@ -16,6 +16,7 @@ export async function callDalleService(backendUrl, text, numImages, dalleName) {
     return response
   }).catch((error) => {
     alert('Error querying DALL-E service. ' + error)
+    throw error
   })).text())
 }
 
@@ -29,6 +30,7 @@ export async function getAvailableModels(backendUrl) {
     return response
   }).catch((error) => {
     alert('Error fetching available models. ' + error)
+    throw error
   })).text())
 
 }
