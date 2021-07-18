@@ -26,6 +26,7 @@ image_size = vae.image_size
 app = Flask(__name__)
 CORS(app)
 
+
 def load_dalle_models() -> Dict:
     models = json.load(open("pretrained_models.json"))
     loaded_models = {}
