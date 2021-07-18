@@ -44,12 +44,13 @@ const App = ({classes}) => {
 
   const isBackendUrlValid = backendUrl !== ''
 
+
   useEffect(() => {
       if (isBackendUrlValid) {
         setIsFetchingModelsList(true)
         getAvailableModels(backendUrl).then((modelsList) => {
           setModels(modelsList)
-          if (modelsList.length > 0) {
+          if (modelsList && modelsList.length > 0) {
             setSelectedModel(modelsList[0])
           }
           setIsFetchingModelsList(false)
@@ -87,9 +88,9 @@ const App = ({classes}) => {
         </Typography>
       </div>
 
-      <Grid container justify="center" alignItems="center" direction="column">
+      <Grid container direction="column" justify="center" alignItems="center">
         <Grid item xs={12}>
-          <Grid container spacing={2}>
+          <Grid container justify="center" alignItems="center" direction="row" spacing={3}>
             <Grid item>
               <BackendUrlInput setBackendValidUrl={setBackendUrl} isLoadingModels={isFetchingModelsList}
                                setBackendInvalidUrl={() => {
@@ -97,18 +98,16 @@ const App = ({classes}) => {
                                  setSelectedModel('')
                                }}/>
             </Grid>
-
             <Grid item>
               <AvailableModelsInput models={models} selectedModel={selectedModel} onModelSelected={onModelSelected}
                                     disabled={!isBackendUrlValid || isFetchingModelsList}/>
             </Grid>
-
-            <Grid item>
-              <TextPromptInput enterPressedCallback={enterPressedCallback} disabled={isFetchingImgs || !isBackendUrlValid || isFetchingModelsList}/>
-            </Grid>
           </Grid>
         </Grid>
 
+        <Grid item xs={12}>
+          <TextPromptInput enterPressedCallback={enterPressedCallback} disabled={isFetchingImgs || !isBackendUrlValid || isFetchingModelsList}/>
+        </Grid>
       </Grid>
       <Grid container justify="center" alignItems="center" className={classes.gallery}>
         {!isFetchingImgs && <GeneratedImageList generatedImages={generatedImages}/>}

@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Grid, TextField} from "@material-ui/core";
 import {isValidURL} from "./utils";
 import {PulseLoader} from "react-spinners";
+import qs from "qs";
 
 const useStyles = () => ({
   inputBackend: {
@@ -16,8 +17,14 @@ const useStyles = () => ({
 const BackendUrlInput = ({classes, setBackendValidUrl, setBackendInvalidUrl, isLoadingModels}) => {
   const [backendUrl, setBackendUrl] = useState('');
 
-  function onChange(event) {
-    const newBackendUrl = event.target.value
+  useEffect(() => {
+    const qsBackendUrl = qs.parse(window.location.search, {ignoreQueryPrefix: true}).backendUrl
+    if (qsBackendUrl) {
+      onChange(qsBackendUrl)
+    }
+  }, [setBackendUrl])
+
+  function onChange(newBackendUrl) {
     setBackendUrl(newBackendUrl)
     if (isValidURL(newBackendUrl)) {
       setBackendValidUrl(newBackendUrl)
@@ -27,10 +34,10 @@ const BackendUrlInput = ({classes, setBackendValidUrl, setBackendInvalidUrl, isL
   }
 
   return (
-    <Grid container alignItems="center" spacing={1}>
+    <Grid container spacing={1} alignContent="center">
       <Grid item>
         <TextField className={classes.inputBackend} id="standard-basic" label="Backend URL" value={backendUrl}
-                   onChange={onChange}/>
+                   onChange={(event) => onChange(event.target.value)}/>
       </Grid>
       <Grid item className={classes.loadingSpinner}>
         <PulseLoader sizeUnit={"px"} size={5} color="purple" loading={isLoadingModels}/>
